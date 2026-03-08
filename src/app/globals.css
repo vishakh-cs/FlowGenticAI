@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@import "./theme.css";
+
+:root {
+  --hero-bg: #f9fafb;
+}
+
+.dark {
+  --hero-bg: #020202; 
+}
+
