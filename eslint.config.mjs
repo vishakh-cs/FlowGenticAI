@@ -1,43 +1,80 @@
 import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
-import prettierPlugin from "eslint-plugin-prettier";
-
-const compat = new FlatCompat({
-  baseDirectory: import.meta.dirname,
-  recommendedConfig: js.configs.recommended,
-});
+import nextPlugin from "@next/eslint-plugin-next";
+import tsParser from "@typescript-eslint/parser";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
 
 const eslintConfig = [
-  // Base JavaScript recommendations
+  {
+    ignores: [
+      "node_modules/**",
+      ".next/**",
+      "out/**",
+      "build/**",
+      "dist/**",
+      "playwright-report/**",
+      "test-results/**",
+      "*.config.js",
+      "*.config.mjs",
+      "next-env.d.ts",
+    ],
+  },
   js.configs.recommended,
-
-  ...compat.config({
-    extends: ["next/core-web-vitals", "next/typescript"],
-  }),
-
   {
     files: ["**/*.{js,jsx,ts,tsx}"],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      globals: {
+        React: "readonly",
+        console: "readonly",
+        document: "readonly",
+        globalThis: "readonly",
+        process: "readonly",
+        require: "readonly",
+        window: "readonly",
+      },
+    },
     plugins: {
-      prettier: prettierPlugin,
+      "@next/next": nextPlugin,
+      "@typescript-eslint": tsPlugin,
     },
     rules: {
-      "prettier/prettier": [
-        "error",
-        {
-          tabWidth: 2,
-          semi: true,
-          endOfLine: "auto",
-          singleQuote: false,
-          trailingComma: "es5",
-        },
-      ],
+      ...nextPlugin.configs["core-web-vitals"].rules,
       "@typescript-eslint/ban-types": "off",
+      "@typescript-eslint/no-empty-object-type": "off",
       "@typescript-eslint/no-namespace": "off",
       "array-callback-return": "error",
-      "@typescript-eslint/no-empty-object-type": "off",
       eqeqeq: "error",
       "no-alert": "error",
       "no-return-assign": "error",
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              name: "@mui/material",
+              message:
+                "Please use \"import ComponentName from '@mui/material/ComponentName'\" instead.",
+            },
+            {
+              name: "@mui/icons-material",
+              message:
+                "Please use \"import IconName from '@mui/icons-material/IconName'\" instead.",
+            },
+            {
+              name: "next/link",
+              message:
+                'Please use "import Link from \"@/components/link\"" instead. This is need for "leave page" logic',
+            },
+          ],
+        },
+      ],
       "no-restricted-syntax": [
         "error",
         {
@@ -70,43 +107,13 @@ const eslintConfig = [
             'Do not use "condition ? true : false". Simplify "someVariable === 42 ? true : false " to "someVariable === 42"',
         },
       ],
-      "no-restricted-imports": [
-        "error",
-        {
-          paths: [
-            {
-              name: "@mui/material",
-              message:
-                "Please use \"import ComponentName from '@mui/material/ComponentName'\" instead.",
-            },
-            {
-              name: "@mui/icons-material",
-              message:
-                "Please use \"import IconName from '@mui/icons-material/IconName'\" instead.",
-            },
-            {
-              name: "next/link",
-              message:
-                'Please use "import Link from "@/components/link"" instead. This is need for "leave page" logic',
-            },
-          ],
-        },
-      ],
     },
   },
   {
-    ignores: [
-      "node_modules/**",
-      ".next/**",
-      "out/**",
-      "build/**",
-      "dist/**",
-      "playwright-report/**",
-      "test-results/**",
-      "*.config.js",
-      "*.config.mjs",
-      "next-env.d.ts",
-    ],
+    files: ["**/*.{ts,tsx}"],
+    rules: {
+      "no-undef": "off",
+    },
   },
 ];
 

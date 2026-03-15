@@ -1,24 +1,29 @@
-﻿'use client';
+'use client';
 import React, { useEffect, useState } from 'react'
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { Moon, Sun, Sparkles } from "lucide-react";
 
 export const Navbar = () => {
+  const themeStorageKey = "flowai-theme";
 
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
+    const savedTheme = globalThis.localStorage.getItem(themeStorageKey);
     const prefersDark = globalThis.matchMedia("(prefers-color-scheme: dark)").matches;
-    setIsDark(prefersDark);
+    const shouldUseDark = savedTheme ? savedTheme === "dark" : prefersDark;
 
-    if (prefersDark) {
-      document.documentElement.classList.add("dark");
-    }
+    setIsDark(shouldUseDark);
+    document.documentElement.classList.toggle("dark", shouldUseDark);
   }, []);
 
   const toggleTheme = () => {
-    setIsDark((prev) => !prev);
-    document.documentElement.classList.toggle("dark");
+    setIsDark((prev) => {
+      const nextIsDark = !prev;
+      document.documentElement.classList.toggle("dark", nextIsDark);
+      globalThis.localStorage.setItem(themeStorageKey, nextIsDark ? "dark" : "light");
+      return nextIsDark;
+    });
   };
 
   const links = [

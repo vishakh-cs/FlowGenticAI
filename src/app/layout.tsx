@@ -1,25 +1,9 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk, Caveat } from "next/font/google";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 import { Navbar } from "@/components/navbar";
 import "./globals.css";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-body",
-  display: "swap",
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-heading",
-  display: "swap",
-});
-
-const caveat = Caveat({
-  subsets: ["latin"],
-  variable: "--font-handwritten",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "FlowAI",
@@ -33,9 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.variable} ${spaceGrotesk.variable} ${caveat.variable} ${inter.className}`}
-      >
+      <body className="antialiased">
         <Navbar />
         {children}
       </body>
