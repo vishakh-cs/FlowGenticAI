@@ -75,8 +75,7 @@ export function HeroSection() {
                 </div>
             </div>
 
-            <div className="relative mx-auto w-full ">
-                <div className="h-full w-full" />
+            <div className="relative mx-auto w-full flex items-center justify-center lg:justify-end">
                 <RobotScene />
             </div>
         </section>
