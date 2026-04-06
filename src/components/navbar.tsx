@@ -1,12 +1,14 @@
 'use client';
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { Moon, Sun, Sparkles } from "lucide-react";
+import { useRouter } from 'next/router';
 
 export const Navbar = () => {
   const themeStorageKey = "flowai-theme";
 
   const [isDark, setIsDark] = useState(false);
+  const navigate = useRouter();
 
   useEffect(() => {
     const savedTheme = globalThis.localStorage.getItem(themeStorageKey);
@@ -56,7 +58,7 @@ export const Navbar = () => {
       <div className='flex items-center gap-4'>
         <button
           onClick={toggleTheme}
-          className="p-2 rounded-lg hover:bg-accent transition-colors"
+          className="p-2 rounded-lg hover:bg-accent transition-colors cursor-pointer"
           aria-label="Toggle theme"
         >
           {isDark ? (
@@ -65,7 +67,7 @@ export const Navbar = () => {
             <Moon className="w-5 h-5 text-[#FF6A00]" />
           )}
         </button>
-        <button className='hidden sm:inline-flex'>Login</button>
+        <button onClick={() => navigate.push('/login')} className='hidden sm:inline-flex cursor-pointer'>Login</button>
         <button className="bg-linear-to-r from-[#FF6A00] to-[#FF8C3A] hover:opacity-90 text-white py-2 px-4 rounded-lg flex items-center gap-2">
           Get Started
           <AiOutlineArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
